@@ -1,4 +1,5 @@
 class MlModel < ApplicationRecord
+  has_one_attached :csv
   belongs_to :user
 
   enum status: {

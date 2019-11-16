@@ -13,15 +13,12 @@ class Api::V1::MlModels::UploadCsvController < ApplicationController
     elsif header_row.any? {|h| h.blank?}
       render json: {message: 'Each header must have value'}, status: :unprocessable_entity
     else
-      # TODO: use active storage
-      # if upload_to_s3(csv)
-      #   DataExtractorFromCsvJob.perform_later(ml_model_id: ml_model.id)
-      #   render json: {message: 'successfully uploaded CSV'}
-      # else
-      #   render json: {message: 'Something went wrong. try later'}, status: :unprocessable_entity and return
-      # end
-      DataExtractorFromCsvJob.perform_later(ml_model_id: ml_model.id)
-      render json: {message: 'successfully uploaded CSV'}, status: 201
+      if ml_model.csv.attach(csv)
+        DataExtractorFromCsvJob.perform_later(ml_model_id: ml_model.id)
+        render json: {message: 'successfully uploaded CSV'}, status: 201
+      else
+        render json: {message: 'Something went wrong. try later'}, status: :unprocessable_entity
+      end
     end
   end
 end
