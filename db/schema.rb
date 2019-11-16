@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_16_010322) do
+ActiveRecord::Schema.define(version: 2019_11_16_010942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,15 @@ ActiveRecord::Schema.define(version: 2019_11_16_010322) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ml_model_id"], name: "index_train_data_on_ml_model_id"
+  end
+
+  create_table "train_parameters", force: :cascade do |t|
+    t.bigint "train_datum_id", null: false
+    t.string "name", null: false
+    t.text "value", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["train_datum_id"], name: "index_train_parameters_on_train_datum_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -64,4 +73,5 @@ ActiveRecord::Schema.define(version: 2019_11_16_010322) do
 
   add_foreign_key "ml_models", "users"
   add_foreign_key "train_data", "ml_models"
+  add_foreign_key "train_parameters", "train_data"
 end
