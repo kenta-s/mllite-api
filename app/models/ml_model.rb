@@ -7,6 +7,7 @@ class MlModel < ApplicationRecord
     pending: 1,
     training: 2,
     ready: 3,
+    error: 4,
   }
 
   has_many :train_data, dependent: :destroy
