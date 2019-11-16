@@ -1,4 +1,5 @@
 class Api::V1::MlModelsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_ml_model, only: [:show, :update, :destroy]
 
   # GET /api/v1/ml_models
