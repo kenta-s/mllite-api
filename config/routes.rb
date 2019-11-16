@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :ml_models do
         resources :upload_csv, only: [:create], controller: 'ml_models/upload_csv'
+        resources :prediction, only: [:create], controller: 'ml_models/prediction'
       end
     end
   end
