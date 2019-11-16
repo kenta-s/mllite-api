@@ -11,7 +11,13 @@ class Api::V1::MlModelsController < ApplicationController
 
   # GET /api/v1/ml_models/1
   def show
-    render json: @ml_model
+    parameter_names = @ml_model.train_data.first.try(:train_parameters).try(:pluck, :name) || []
+    render json: {
+      id: @ml_model.id,
+      name: @ml_model.name,
+      status: @ml_model.status,
+      parameterNames: parameter_names
+    }
   end
 
   # POST /api/v1/ml_models

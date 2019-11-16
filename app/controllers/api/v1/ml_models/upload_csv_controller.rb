@@ -1,5 +1,8 @@
+require 'csv'
+
 class Api::V1::MlModels::UploadCsvController < ApplicationController
   before_action :authenticate_user!
+
   def create
     ml_model = current_user.ml_models.find(params[:ml_model_id])
     csv = params[:csv_file]
@@ -13,7 +16,7 @@ class Api::V1::MlModels::UploadCsvController < ApplicationController
     elsif header_row.any? {|h| h.blank?}
       render json: {message: 'Each header must have value'}, status: :unprocessable_entity
     else
-      if ml_model.csv.attach(csv)
+      if ml_model.csv.attach(csv) && ml_model.pending!
         DataExtractorFromCsvJob.perform_later(ml_model_id: ml_model.id)
         render json: {message: 'successfully uploaded CSV'}, status: 201
       else
