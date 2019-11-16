@@ -8,5 +8,7 @@ class MlModel < ApplicationRecord
     ready: 3,
   }
 
+  has_many :train_data, dependent: :destroy
+
   validates :name, presence: true, length: { maximum: 32 }
 end
