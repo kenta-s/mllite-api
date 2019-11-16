@@ -5,8 +5,9 @@ class Api::V1::MlModels::PredictionController < ApplicationController
   def create
     ml_model = current_user.ml_models.find(params[:ml_model_id])
     if ml_model.ready?
-      parameter_names = ml_model.train_data.first.train_parameters.pluck(:name)
-      if params[:target_parameters].keys.sort == parameter_names.sort
+      parameter_names = ml_model.train_data.first.try(:train_parameters).try(:pluck, :name) || []
+      parameter_keys = params[:target_parameters].map{|t| t.keys.first }.compact
+      if parameter_keys.sort == parameter_names.sort
 
         # TODO: return actual value
         render json: {predicted: 'entertainment'}, status: 200
@@ -17,5 +18,10 @@ class Api::V1::MlModels::PredictionController < ApplicationController
       render json: {message: 'this model has not been trained'}, status: 422
     end
   end
-end
 
+  private
+
+  # def prediction_params
+  #   params.fetch(:target_parameters, [])
+  # end
+end
