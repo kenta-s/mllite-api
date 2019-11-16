@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   namespace :api, { format: 'json' } do
     namespace :v1 do
-      resources :ml_models
+      resources :ml_models do
+        resources :upload_csv, only: [:create], controller: 'ml_models/upload_csv'
+      end
     end
   end
 end
