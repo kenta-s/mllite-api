@@ -7,6 +7,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable, :confirmable
   include DeviseTokenAuth::Concerns::User
 
+  has_many :ml_models, dependent: :destroy
+
 	def will_save_change_to_email?
 		super
 	end
