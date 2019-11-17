@@ -36,11 +36,10 @@ RSpec.describe "UploadCsv", type: :request do
     let!(:ml_model) { FactoryBot.create(:ml_model, user: current_user) }
     context "with valid params" do
       it "enqueues something" do
-        expect {
-          post "/api/v1/ml_models/#{ml_model.id}/upload_csv", params: {csv_file: valid_csv}, headers: valid_headers
-        }.to have_enqueued_job(DataExtractorFromCsvJob)
+        post "/api/v1/ml_models/#{ml_model.id}/upload_csv", params: {csv_file: valid_csv}, headers: valid_headers
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json; charset=utf-8')
+        expect(ml_model.train_parameters.pluck(:name)).to contain_exactly('news content', 'media name')
       end
     end
 
@@ -50,9 +49,7 @@ RSpec.describe "UploadCsv", type: :request do
       }
 
       it "renders a JSON response with errors for the new ml_model" do
-        expect {
-          post "/api/v1/ml_models/#{ml_model.id}/upload_csv", params: {csv_file: csv_without_y}, headers: valid_headers
-        }.not_to have_enqueued_job(DataExtractorFromCsvJob)
+        post "/api/v1/ml_models/#{ml_model.id}/upload_csv", params: {csv_file: csv_without_y}, headers: valid_headers
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to eq('application/json; charset=utf-8')
       end
