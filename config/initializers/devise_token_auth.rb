@@ -54,7 +54,8 @@ DeviseTokenAuth.setup do |config|
   # config.enable_standard_devise_support = false
   if Rails.env.development?
     config.default_confirm_success_url = 'http://localhost:5000/welcome'
-  else
-    config.default_confirm_success_url = 'https://www.example.com'
+  elsif Rails.env.production?
+    # TODO: change domain
+    config.default_confirm_success_url = 'https://mllite.herokuapp.com/welcome'
   end
 end
