@@ -14,4 +14,12 @@ class MlModel < ApplicationRecord
   # has_many :train_data, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 32 }
+  before_create :set_identifier
+
+  private
+
+  # identifier is not validated in Application level but it has constraints in DB level
+  def set_identifier
+    self.identifier ||= SecureRandom.uuid
+  end
 end

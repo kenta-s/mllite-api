@@ -1,5 +1,8 @@
 FactoryBot.define do
   factory :ml_model do
+    # sequence :identifier do |n|
+    #   "abcdefg#{n}"
+    # end
     user { nil }
     name { "MyString" }
     status { 1 }

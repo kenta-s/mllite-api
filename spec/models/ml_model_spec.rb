@@ -4,7 +4,6 @@ RSpec.describe MlModel, type: :model do
   describe "associations" do
     it { should belong_to(:user) }
     it { should have_many(:train_parameters).dependent(:destroy) }
-    # it { should have_many(:train_data).dependent(:destroy) }
   end
 
   describe "validations" do

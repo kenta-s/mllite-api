@@ -37,11 +37,13 @@ ActiveRecord::Schema.define(version: 2019_11_16_045632) do
   end
 
   create_table "ml_models", force: :cascade do |t|
+    t.string "identifier", null: false
     t.bigint "user_id", null: false
     t.string "name", null: false
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["identifier"], name: "index_ml_models_on_identifier", unique: true
     t.index ["user_id"], name: "index_ml_models_on_user_id"
   end
 
