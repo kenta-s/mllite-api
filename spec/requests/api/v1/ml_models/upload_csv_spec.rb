@@ -34,8 +34,15 @@ RSpec.describe "UploadCsv", type: :request do
   describe "POST #create" do
     let(:current_user) { FactoryBot.create(:user) }
     let!(:ml_model) { FactoryBot.create(:ml_model, user: current_user) }
+    let(:bucket_double) { double(MlLiteBucket) }
+    let(:object_spy) { spy(Aws::S3::Object) }
+    before do
+      allow(MlLiteBucket).to receive(:new).and_return(bucket_double)
+    end
     context "with valid params" do
       it "enqueues something" do
+        expect(bucket_double).to receive(:object).with(/csv\//).once.and_return(object_spy)
+        expect(object_spy).to receive(:put).with({body: anything}).once
         post "/api/v1/ml_models/#{ml_model.id}/upload_csv", params: {csv_file: valid_csv}, headers: valid_headers
         expect(response).to have_http_status(:created)
         expect(response.content_type).to eq('application/json; charset=utf-8')

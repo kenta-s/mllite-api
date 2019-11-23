@@ -1,19 +1,19 @@
 require 'csv'
 
-# class DataExtractorFromCsvJob < ApplicationJob
 class MlModelTrainingJob < ApplicationJob
   queue_as :training
 
   def perform(ml_model_id:)
     ml_model = MlModel.find(ml_model_id)
+		ml_model.training!
 
     puts "========== starting =========="
-    stdout = nil
-    ml_model.csv.open do |csv|
-      # TODO: make sure python3 is OK. it seems like I can just use python
-      stdout = `python3 #{Rails.root.join('lib','machine_learning', 'main.py')} #{csv.path} #{ml_model.identifier}`
-    end
-    h5_filepath = Rails.root.join('lib','machine_learning', 'tmp', "#{ml_model.identifier}.h5")
+    bucket = MlLiteBucket.new
+		obj = bucket.object("csv/#{ml_model.identifier}.csv")
+    csv_path = Rails.root.join('lib', 'machine_learning', 'tmp', "#{ml_model.identifier}.csv")
+		obj.get(response_target: csv_path)
+    stdout = `python3 #{Rails.root.join('lib','machine_learning', 'main.py')} #{csv_path} #{ml_model.identifier}`
+    # h5_filepath = Rails.root.join('lib','machine_learning', 'tmp', "#{ml_model.identifier}.h5")
     puts "========== finished =========="
 
 # stdout is like this
@@ -21,7 +21,7 @@ class MlModelTrainingJob < ApplicationJob
 # Epoch 1/10
 # 14391/14391 [==============================] - 2s 168us/sample - loss: 0.7690 - acc: 0.6760
 # Epoch 2/10
-# 14391/14391 [==============================] - 2s 152us/sample - loss: 0.4693 - acc: 0.8290                           │yarn run v1.19.0
+# 14391/14391 [==============================] - 2s 152us/sample - loss: 0.4693 - acc: 0.8290
 # Epoch 3/10
 # 14391/14391 [==============================] - 2s 146us/sample - loss: 0.3391 - acc: 0.8802
 # Epoch 4/10

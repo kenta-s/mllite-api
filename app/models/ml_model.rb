@@ -1,5 +1,6 @@
 class MlModel < ApplicationRecord
-  has_one_attached :csv
+  # has_one_attached :csv
+  # has_one_attached :trained_model
   belongs_to :user
 
   enum status: {
