@@ -27,6 +27,7 @@ gem 'devise_token_auth'
 gem 'sidekiq'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
+gem 'faraday'
 
 # gem 'aws-sdk-s3', require: false
 gem 'aws-sdk'

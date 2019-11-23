@@ -9,8 +9,9 @@ class Api::V1::MlModels::PredictionController < ApplicationController
       parameter_keys = params[:target_parameters].keys.compact
       if parameter_keys.sort == parameter_names.sort
 
-        # TODO: return actual value
-        render json: {predicted: 'entertainment'}, status: 200
+        # TODO: use actual host
+        response = Faraday.post('http://localhost:6000/predict', params[:target_parameters].to_json, "Content-Type" => "application/json")
+        render json: {predicted: JSON(response.body).dig("result").to_s}, status: 200
       else
         render json: {message: 'invalid parameters'}, status: 422
       end

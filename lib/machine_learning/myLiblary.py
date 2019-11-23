@@ -32,7 +32,8 @@ def convert_text_into_np_array(dictionary, text):
 def get_dictionary(csv):
     # argv[1] is occupied by csv path
     dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier=argv[2]))
-    # dictionary_name = './tmp/{identifier}.txt'.format(identifier=argv[2])
+    # dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier='d46927ab-cda6-47a6-92a6-3d50d399410c'))
+
     words = []
     for text in csv['text']:
           words.append(extract_words(text))

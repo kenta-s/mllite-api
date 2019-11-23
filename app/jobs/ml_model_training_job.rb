@@ -5,7 +5,6 @@ class MlModelTrainingJob < ApplicationJob
     ml_model = MlModel.find(ml_model_id)
     ml_model.training!
 
-    puts "========== starting =========="
     bucket = MlLiteBucket.new
 		obj = bucket.object("csv/#{ml_model.identifier}.csv")
     csv_path = Rails.root.join('lib', 'machine_learning', 'tmp', "#{ml_model.identifier}.csv")
@@ -16,7 +15,6 @@ class MlModelTrainingJob < ApplicationJob
     File.open(h5_filepath) do |f|
       h5_obj.put(body: f)
     end
-    puts "========== finished =========="
 
 # stdout is like this
 

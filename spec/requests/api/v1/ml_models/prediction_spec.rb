@@ -25,9 +25,14 @@ RSpec.describe "Prediction", type: :request do
   describe "POST #create" do
     let(:current_user) { FactoryBot.create(:user) }
     let!(:ml_model) { FactoryBot.create(:ml_model, :ready, user: current_user) }
+    let(:mock_response) { instance_double('response') }
+    before do
+      allow(mock_response).to receive(:body).and_return('{"result":"entertainment"}')
+    end
 
     context "with valid params" do
       it "renders a JSON response with predicted value" do
+        expect(Faraday).to receive(:post).once.and_return(mock_response)
         post "/api/v1/ml_models/#{ml_model.id}/prediction", params: {target_parameters: valid_attributes}, headers: valid_headers
         expect(response).to have_http_status(:success)
         res = JSON(response.body)

@@ -1,24 +1,7 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## run prediction server
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+FLASK_RUN_PORT=6000 FLASK_APP=prediction_server.py MODEL_PATH=tmp/d46927ab-cda6-47a6-92a6-3d50d399410c.h5 CSV_PATH=tmp/d46927ab-cda6-47a6-92a6-3d50d399410c.csv flask run
+```
