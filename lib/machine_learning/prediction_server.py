@@ -24,8 +24,8 @@ def hello():
     return f'Hello, {escape(name)}!'
 
 import json
-@app.route('/predict', methods=['POST'])
-def post():
+@app.route('/prediction/<identifier>', methods=['POST'])
+def post(identifier):
     body = request.get_data()
     json_string = body.decode('utf8').replace("'",'"')
     res = json.loads(json_string)

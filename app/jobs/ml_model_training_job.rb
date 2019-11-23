@@ -15,6 +15,8 @@ class MlModelTrainingJob < ApplicationJob
     File.open(h5_filepath) do |f|
       h5_obj.put(body: f)
     end
+		# TODO: up server
+    ml_model.ready!
 
 # stdout is like this
 
@@ -42,9 +44,5 @@ class MlModelTrainingJob < ApplicationJob
 #
 # Test accuracy: 0.7817386
 
-    # # TODO: make sure this works
-    # CSV.foreach(ml_model.csv, headers: true) do |csv|
-    #   p csv
-    # end
   end
 end
