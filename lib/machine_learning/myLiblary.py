@@ -1,3 +1,4 @@
+from sys import argv
 import MeCab
 from gensim import corpora, matutils
 import numpy as np
@@ -28,7 +29,8 @@ def convert_text_into_np_array(dictionary, text):
     return np.array(dense)
 
 def get_dictionary(csv):
-    dictionary_name = './tmp/words.txt'
+    # dictionary_name = './tmp/words.txt'
+    dictionary_name = './tmp/{identifier}.txt'.format(identifier=argv[1])
     words = []
     for text in csv['text']:
           words.append(extract_words(text))
