@@ -1,4 +1,5 @@
 from sys import argv
+from os import path
 import MeCab
 from gensim import corpora, matutils
 import numpy as np
@@ -29,8 +30,9 @@ def convert_text_into_np_array(dictionary, text):
     return np.array(dense)
 
 def get_dictionary(csv):
-    # dictionary_name = './tmp/words.txt'
-    dictionary_name = './tmp/{identifier}.txt'.format(identifier=argv[1])
+    # argv[1] is occupied by csv path
+    dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier=argv[2]))
+    # dictionary_name = './tmp/{identifier}.txt'.format(identifier=argv[2])
     words = []
     for text in csv['text']:
           words.append(extract_words(text))

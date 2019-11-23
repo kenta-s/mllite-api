@@ -23,6 +23,7 @@ class Api::V1::MlModels::UploadCsvController < ApplicationController
         end
 
         if ml_model.csv.attach(csv) && ml_model.pending!
+          MlModelTrainingJob.perform_later(ml_model_id: ml_model.id)
           render json: {message: 'successfully uploaded CSV'}, status: 201
         else
           render json: {message: 'Something went wrong. try later'}, status: :unprocessable_entity
