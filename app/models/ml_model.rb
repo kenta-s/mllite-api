@@ -10,7 +10,8 @@ class MlModel < ApplicationRecord
     error: 4,
   }
 
-  has_many :train_data, dependent: :destroy
+  has_many :train_parameters, dependent: :destroy
+  # has_many :train_data, dependent: :destroy
 
   validates :name, presence: true, length: { maximum: 32 }
 end

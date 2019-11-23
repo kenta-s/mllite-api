@@ -45,21 +45,12 @@ ActiveRecord::Schema.define(version: 2019_11_16_045632) do
     t.index ["user_id"], name: "index_ml_models_on_user_id"
   end
 
-  create_table "train_data", force: :cascade do |t|
-    t.bigint "ml_model_id", null: false
-    t.string "y", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["ml_model_id"], name: "index_train_data_on_ml_model_id"
-  end
-
   create_table "train_parameters", force: :cascade do |t|
-    t.bigint "train_datum_id", null: false
+    t.bigint "ml_model_id", null: false
     t.string "name", null: false
-    t.text "value", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["train_datum_id"], name: "index_train_parameters_on_train_datum_id"
+    t.index ["ml_model_id"], name: "index_train_parameters_on_ml_model_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -94,6 +85,5 @@ ActiveRecord::Schema.define(version: 2019_11_16_045632) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "ml_models", "users"
-  add_foreign_key "train_data", "ml_models"
-  add_foreign_key "train_parameters", "train_data"
+  add_foreign_key "train_parameters", "ml_models"
 end
