@@ -22,8 +22,6 @@ class Api::V1::MlModels::UploadCsvController < ApplicationController
           ml_model.train_parameters.create!(name: name)
         end
 
-        # s3 = Aws::S3::Resource.new
-				# bucket = s3.bucket(Rails.application.credentials.dig(:aws, :bucket))
         bucket = MlLiteBucket.new
 				obj = bucket.object("csv/#{ml_model.identifier}.csv")
 				if obj.put(body: csv.tempfile) && ml_model.pending!

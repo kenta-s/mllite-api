@@ -1,11 +1,9 @@
-require 'csv'
-
 class MlModelTrainingJob < ApplicationJob
   queue_as :training
 
   def perform(ml_model_id:)
     ml_model = MlModel.find(ml_model_id)
-		ml_model.training!
+    ml_model.training!
 
     puts "========== starting =========="
     bucket = MlLiteBucket.new
@@ -13,7 +11,11 @@ class MlModelTrainingJob < ApplicationJob
     csv_path = Rails.root.join('lib', 'machine_learning', 'tmp', "#{ml_model.identifier}.csv")
 		obj.get(response_target: csv_path)
     stdout = `python3 #{Rails.root.join('lib','machine_learning', 'main.py')} #{csv_path} #{ml_model.identifier}`
-    # h5_filepath = Rails.root.join('lib','machine_learning', 'tmp', "#{ml_model.identifier}.h5")
+    h5_filepath = Rails.root.join('lib','machine_learning', 'tmp', "#{ml_model.identifier}.h5")
+    h5_obj = bucket.object("models/#{ml_model.identifier}.h5")
+    File.open(h5_filepath) do |f|
+      h5_obj.put(body: f)
+    end
     puts "========== finished =========="
 
 # stdout is like this
