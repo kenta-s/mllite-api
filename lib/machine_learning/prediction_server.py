@@ -8,16 +8,14 @@ import MeCab
 from gensim import corpora, matutils
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
-from myLiblary import text_to_np_array
+from myLiblary import json_to_np_array
 
-model = keras.models.load_model(environ.get("MODEL_PATH"))
-# model = keras.models.load_model('model.h5')
+identifier = environ.get("IDENTIFIER")
+model_path = path.join(path.dirname(__file__), 'tmp/{identifier}.h5'.format(identifier=identifier))
+model = keras.models.load_model(model_path)
 
 app = Flask(__name__)
 
-print(environ.get("MODEL_PATH"))
-df = pd.read_csv(environ.get("CSV_PATH"))
-# df = pd.read_csv('./ready.csv')
 @app.route('/')
 def hello():
     name = request.args.get("name", "World")
@@ -30,9 +28,7 @@ def post(identifier):
     json_string = body.decode('utf8').replace("'",'"')
     res = json.loads(json_string)
     print(res)
-    t = res["text"]
-    # t = "Xperiaはとても良いですね"
-    d = np.array([text_to_np_array(df, t)])
+    d = np.array([json_to_np_array(identifier, res)])
     res = model.predict(d)
     result = {
       "result": int(np.argmax(res))

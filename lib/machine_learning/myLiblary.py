@@ -29,9 +29,9 @@ def convert_text_into_np_array(dictionary, text):
     dense = convert_text_into_dense(dictionary, text)
     return np.array(dense)
 
-def get_dictionary(csv):
+def get_dictionary(identifier, csv):
     # argv[1] is occupied by csv path
-    dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier=argv[2]))
+    dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier=identifier))
     # dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier='d46927ab-cda6-47a6-92a6-3d50d399410c'))
 
     words = []
@@ -39,24 +39,29 @@ def get_dictionary(csv):
           words.append(extract_words(text))
 
     dictionary = corpora.Dictionary(words)
-    dictionary.save_as_text(dictionary_name)
+    # dictionary.save_as_text(dictionary_name)
+    dictionary.save(dictionary_name)
 
     return dictionary
 
-def prepare_train_variables(df, csv):
-    dictionary = get_dictionary(df)
+def prepare_train_variables(identifier, df, csv):
+    dictionary = get_dictionary(identifier, df)
     x_list = []
     y_list = []
     for _, row in csv.iterrows():
+        # TODO: use all parameters
         text = row[0]
         dense = convert_text_into_np_array(dictionary, text)
-        y_list.append(np.array([row[1]]))
+        y_list.append(np.array([row['y']]))
         tmp = np.array([dense])
         x_list.append(dense)
 
     return np.array(x_list), np.array(y_list)
 
-def text_to_np_array(df, text):
-    dictionary = get_dictionary(df)
+def json_to_np_array(identifier, json):
+    dictionary_name = path.join(path.dirname(__file__), 'tmp/{identifier}.txt'.format(identifier=identifier))
+    dictionary = corpora.Dictionary.load(dictionary_name)
+    # TODO: handle all json
+    text = json['text']
     dense = convert_text_into_dense(dictionary, text)
     return np.array(dense)

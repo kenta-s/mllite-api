@@ -5,8 +5,8 @@ import pandas as pd
 
 from myLiblary import prepare_train_variables
 
-csv_path = argv[1]
-identifier = argv[2]
+identifier = argv[1]
+csv_path = path.join(path.dirname(__file__), 'tmp/{identifier}.csv'.format(identifier=identifier))
 
 df = pd.read_csv(csv_path)
 TEST_SIZE = 0.1
@@ -14,8 +14,8 @@ TEST_SIZE = 0.1
 train = df.sample(frac=0.9,random_state=0)
 test = df.drop(train.index)
 
-x_train, y_train = prepare_train_variables(df, train[['text', 'y']])
-x_test, y_test = prepare_train_variables(df, test[['text', 'y']])
+x_train, y_train = prepare_train_variables(identifier, df, train)
+x_test, y_test = prepare_train_variables(identifier, df, test)
 
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Dense(64, activation=tf.nn.relu))
