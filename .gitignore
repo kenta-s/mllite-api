@@ -24,3 +24,4 @@
 /config/credentials/development.key
 __pycache__
 /lib/*/tmp/*
+/lib/machine_learning/env/*

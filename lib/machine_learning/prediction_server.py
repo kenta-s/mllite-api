@@ -1,15 +1,13 @@
 from flask import Flask, escape, request, jsonify
 from os import environ, path
-import tensorflow as tf
-from tensorflow import keras
+from tensorflow.keras.models import load_model
 import numpy as np
-from IPython import embed
 from myLiblary import json_to_np_array
 import json
 
 identifier = environ.get("IDENTIFIER")
 model_path = path.join(path.dirname(__file__), 'tmp/{identifier}.h5'.format(identifier=identifier))
-model = keras.models.load_model(model_path)
+model = load_model(model_path)
 
 app = Flask(__name__)
 
