@@ -1,0 +1,5 @@
+- apt install python3-pip
+- apt install python3-flask
+- pip3 install tensorflow
+- pip3 install mecab-python3
+- pip3 install gensim
