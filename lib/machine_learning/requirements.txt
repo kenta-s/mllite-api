@@ -1,3 +1,4 @@
+pandas
 mecab-python3
 gensim
 tensorflow
